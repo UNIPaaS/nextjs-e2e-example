@@ -1,80 +1,169 @@
-import { ReactNode } from 'react'
-import Link from 'next/link'
+// components/layout/index.tsx
+import { ReactNode, useEffect } from "react";
+import Link from "next/link";
+import { useStore } from "@/hooks/useStore";
+import { SelectInput } from "@/components/inputs/select";
+import { useApi } from "@/hooks/useApi";
+import * as EnvironmentKeys from "@/environment-keys.json";
+import { useSdk } from "@/hooks/useSdk";
+import { Button } from "@/components/button";
+import { TextInput } from "@/components/inputs/text";
 
 export function Layout({ children }: { children: ReactNode }) {
+  const [selectedVendorId, setSelectedVendorId] = useStore('selectedVendorId');
+  const [vendors, setVendors] = useStore('vendors');
+  const [privateKey, setPrivateKey] = useStore('privateKey');
+  const [environment, setEnvironment] = useStore('environment');
+  const [accessToken, setAccessToken] = useStore('accessToken');
+  const [unipaasLoaded, setUnipaasLoaded] = useStore('unipaasLoaded');
+  const [components, setComponents] = useStore('components');
+
+  // @ts-ignore
+  const environmentKeys = EnvironmentKeys[environment];
+  const {scriptSrc, baseURL} = environmentKeys || {};
+  const {postAuthorize, getVendors} = useApi(baseURL, privateKey);
+
+  const authorizeAPI = async () => {
+    const data = await postAuthorize({
+      ...(selectedVendorId && {vendorId: selectedVendorId}),
+    });
+    setAccessToken(data?.accessToken);
+  }
+
+  // on private key update get vendors
+  useEffect(() => {
+    if (!privateKey) {
+      return;
+    }
+    getVendors().then((vendors) => {
+      setVendors(vendors);
+    }).catch((error) => {
+      console.error('GET /vendors failed', error);
+    });
+  }, [privateKey]);
+
+  // on environment change: update private key
+  useEffect(() => {
+    setAccessToken('');
+    setPrivateKey('');
+    setUnipaasLoaded(false);
+    setPrivateKey(environmentKeys.privateKey);
+  }, [environmentKeys]);
+
+  // init unipaas sdk
+  useSdk("unipaas-script", scriptSrc, () => setUnipaasLoaded(true));
+
+  // on unipaas load and accessToken available: create unipaas components
+  useEffect(() => {
+    // make sure unipaas is loaded and we have an access token
+    if (!unipaasLoaded || !accessToken) {
+      return;
+    }
+
+    // unipaas should be loaded and we have an access token; safety check
+    const unipaas = window.unipaas;
+    if (!unipaas) {
+      console.warn('no unipaas');
+      return;
+    }
+
+    // if components already exist: reset them
+    if (components) {
+      components.reset({accessToken});
+      return;
+    }
+
+    // otherwise create new components
+    const unipaasComponents = unipaas.components(accessToken, {
+      paymentsEnabled: true,
+      theme: {
+        boxShadow: "0px 3px 15px rgba(27, 79, 162, 0.11)"
+      }
+    });
+
+    setComponents(unipaasComponents);
+  }, [accessToken, unipaasLoaded, components]);
+
+  // on selected vendor id change: authorize via api
+  useEffect(() => {
+    if (!selectedVendorId) {
+      return;
+    }
+    authorizeAPI();
+  }, [selectedVendorId]);
+
   return (
-    <div className="flex flex-col h-screen mx-auto">
-      <nav className="border-b border-gray-200 py-5 relative z-20 bg-background shadow-[0_0_15px_0_rgb(0,0,0,0.1)]">
-        <div className="flex items-center mx-auto lg:px-6 max-w-7xl px-14">
-          <div className="flex flex-row items-center">
-            <Link
-              className="text-link hover:text-link-light transition-colors no-underline [&_code]:text-link [&_code]:hover:text-link-light [&_code]:transition-colors"
-              href="/"
-            >
-              <span>
-                <svg height={26} viewBox="0 0 75 65" fill="#000">
-                  <title>Vercel Logo</title>
-                  <path d="M37.59.25l36.95 64H.64l36.95-64z" />
-                </svg>
-              </span>
+    <div className="flex h-screen bg-gray-50">
+      <header className="absolute top-0 w-full bg-white border-b p-4">
+        <div className="flex justify-between items-center">
+          <h1 className="text-lg font-bold">
+            <Link href="/">
+              UNIPaaS Platform
             </Link>
-            <ul className="flex items-center content-center">
-              <li className="ml-2 text-gray-200">
-                <svg
-                  viewBox="0 0 24 24"
-                  width={32}
-                  height={32}
-                  stroke="currentColor"
-                  strokeWidth={1}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  fill="none"
-                  shapeRendering="geometricPrecision"
-                >
-                  <path d="M16.88 3.549L7.12 20.451" />
-                </svg>
-              </li>
-              <li className="font-medium" style={{ letterSpacing: '.01px' }}>
-                <a
-                  className="text-link hover:text-link-light transition-colors no-underline [&_code]:text-link [&_code]:hover:text-link-light [&_code]:transition-colors text-accents-6 duration-200 hover:text-accents-8 cursor-pointer"
-                  target="_blank"
-                  rel="noreferrer"
-                  href="https://github.com/chhpt/nextjs-starter"
-                >
-                  Next.js Starter
-                </a>
-              </li>
-            </ul>
+          </h1>
+
+          <div className="justify-end">
+            <SelectInput label="Vendor" value={selectedVendorId} setValue={setSelectedVendorId}>
+              <option value="">Select a vendor</option>
+              {vendors.map((vendor: {id: string, name: string}) => (
+                <option key={vendor.id} value={vendor.id}>{vendor.name} ({vendor.id})</option>
+              ))}
+            </SelectInput>
           </div>
-          <div className="justify-end flex-1 hidden md:flex">
-            <nav className="inline-flex flex-row items-center">
-              <span className="flex items-center h-full ml-2 cursor-not-allowed text-accents-5">
-                <a
-                  data-variant="ghost"
-                  className="relative inline-flex items-center justify-center cursor pointer no-underline px-3.5 rounded-md font-medium outline-0 select-none align-middle whitespace-nowrap transition-colors ease-in duration-200 text-success hover:bg-[rgba(0,68,255,0.06)] h-10 leading-10 text-[15px]"
-                  href="https://github.com/vercel/examples/tree/main"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  More Examples →
-                </a>
-              </span>
-              <span className="flex items-center h-full ml-2 cursor-not-allowed text-accents-5">
-                <a
-                  data-variant="primary"
-                  className="relative inline-flex items-center justify-center cursor pointer no-underline px-3.5 rounded-md font-medium outline-0 select-none align-middle whitespace-nowrap transition-colors ease-in duration-200 border border-solid text-background bg-success border-success-dark hover:bg-success/90 shadow-[0_5px_10px_rgb(0,68,255,0.12)] h-10 leading-10 text-[15px]"
-                  href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchhpt%2Fnextjs-starter&project-name=nextjs-starter&repository-name=nextjs-starter"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Clone &amp; Deploy
-                </a>
-              </span>
-            </nav>
+
+
+        </div>
+      </header>
+
+      <aside className="mt-16 w-64 bg-white p-4 shadow-lg">
+        <ul>
+          <li>
+            <Link href="/" className="block my-2 py-2 px-4 rounded hover:bg-blue-500 hover:text-white transition-colors duration-200">
+              Settings
+            </Link>
+          </li>
+          <li>
+            <Link href="/onboarding" className="block my-2 py-2 px-4 rounded hover:bg-blue-500 hover:text-white transition-colors duration-200">
+              Onboarding
+            </Link>
+          </li>
+          <li>
+            <Link href="/pay-portal" className="block my-2 py-2 px-4 rounded hover:bg-blue-500 hover:text-white transition-colors duration-200">
+              Pay Portal
+            </Link>
+          </li>
+        </ul>
+      </aside>
+
+      <main className="mt-16 flex-1 py-4 px-8 overflow-auto">
+        {/* settings */}
+        <div className="pb-8 mb-8 border-b-2">
+          <h2 className="text-2xl font-bold my-4">Settings</h2>
+          <div className="flex items-baseline space-x-2">
+            {/* environment */}
+            <SelectInput label="Environment" value={environment} setValue={setEnvironment}>
+              <option value="local">local</option>
+              <option value="development">development</option>
+              <option value="sandbox">sandbox</option>
+              <option value="production">production</option>
+            </SelectInput>
+
+            {/* private key */}
+            <TextInput label="Private Key" value={privateKey} setValue={setPrivateKey} />
+          </div>
+
+          <br />
+          {/* authorize button */}
+          <Button onClick={authorizeAPI}>
+            POST /authorize
+          </Button>
+          <div className="mt-4 flex items-baseline space-x-2">
+            <strong>Components status</strong>: {components ? 'loaded' : 'not loaded'}
           </div>
         </div>
-      </nav>
-      {children}
+        {children}
+      </main>
+
     </div>
   )
 }

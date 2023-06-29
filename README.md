@@ -1,20 +1,12 @@
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/26466516/107675802-36216b80-6c77-11eb-8db1-4d3407dc53d9.png" alt="Next.js and TypeScript">
-</p>
+# UNIPaaS Platform Integration - Next.js Full E2E Example
 
-<p align="center">
-  <img src="https://img.shields.io/static/v1?label=PRs&message=welcome&style=for-the-badge&color=24B36B&labelColor=000000" alt="PRs welcome!" />
+## Intro
 
-  <img alt="License" src="https://img.shields.io/github/license/chhpt/typescript-nextjs-starter?style=for-the-badge&color=24B36B&labelColor=000000">
+This is a full working example of a Next.js project that implements UNIPaaS Platform Integration.
 
-  <a href="https://twitter.com/intent/follow?screen_name=cwuyiqing">
-    <img src="https://img.shields.io/twitter/follow/cwuyiqing?style=for-the-badge&color=24B36B&labelColor=000000" alt="Follow @chhpt" />
-  </a>
-</p>
+This project was based on @cwuyiqing's [nextjs-starter](https://github.com/chhpt/nextjs-starter).
 
-<br>
-
-A Next.js starter that includes all you need to build amazing projects 🔥. Fork and customize from [jpedroschmitz](https://github.com/jpedroschmitz/typescript-nextjs-starter)
+The starter includes:
 
 - 🚀 **Next.js 13 & React 18**
 - ⚙️ **Tailwind CSS 3** - A utility-first CSS framework
@@ -28,38 +20,10 @@ A Next.js starter that includes all you need to build amazing projects 🔥. For
 
 ## 🚀 Getting started
 
-The best way to start with this template is using `create-next-app`.
+Before you get started, you will need ro rename `environment-keys.example.json` to `environment-keys.json` and populate it with your UNIPaaS private key.
+The quickest way to get started is to use the following steps:
 
-```
-npx create-next-app ts-next -e https://github.com/chhpt/nextjs-starter
-```
-
-or
-
-```
-pnpm create next-app ts-next -e https://github.com/chhpt/nextjs-starter
-```
-
-If you prefer you can clone this repository and run the following commands inside the project folder:
-
-1. `pnpm install` or `npm install`;
-2. `pnpm dev`;
-
-To view the project open `http://localhost:3000`.
-
-## 🤝 Contributing
-
-1. Fork this repository;
-2. Create your branch: `git checkout -b my-new-feature`;
-3. Commit your changes: `git commit -m 'Add some feature'`;
-4. Push to the branch: `git push origin my-new-feature`.
-
-**After your pull request is merged**, you can safely delete your branch.
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for more information.
-
----
-
-Made with ♥ by Clare Chang
+1. clone this repo
+2. cd into the directory
+3. `yarn install`
+4. `yarn dev`
