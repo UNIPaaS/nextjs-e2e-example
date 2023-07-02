@@ -30,19 +30,19 @@ export default function Home() {
         <div>
           <div className="flex items-baseline space-x-2">
             {/* customer reference */}
-            <TextInput label="Customer Reference" value={customer.reference} setValue={(reference => ({
+            <TextInput label="Customer Reference" value={customer.reference} setValue={(reference => setCustomer({
               ...customer,
-              reference
+              reference,
             }))} />
 
             {/* customer name */}
-            <TextInput label="Customer Name" value={customer.name} setValue={(name => ({
+            <TextInput label="Customer Name" value={customer.name} setValue={(name => setCustomer({
               ...customer,
               name
             }))} />
 
             {/* customer email */}
-            <TextInput label="Customer Email" value={customer.email} setValue={(email => ({
+            <TextInput label="Customer Email" value={customer.email} setValue={(email => setCustomer({
               ...customer,
               email
             }))} />
