@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 export const useSdk = (id: string, scriptSrc: string, onLoad: () => void) => {
-  // on environment change: load unipaas script
+  // on src change: load unipaas script
   useEffect(() => {
     // remove existing unipaas script
     const existingScript = document.getElementById('unipaas-script');
