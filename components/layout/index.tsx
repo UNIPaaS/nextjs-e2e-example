@@ -132,6 +132,11 @@ export function Layout({ children }: { children: ReactNode }) {
               Pay Portal
             </Link>
           </li>
+          <li>
+            <Link href="/invoice" className="block my-2 py-2 px-4 rounded hover:bg-blue-500 hover:text-white transition-colors duration-200">
+              Invoice
+            </Link>
+          </li>
         </ul>
       </aside>
 

@@ -4,13 +4,12 @@ import { useStore } from "@/hooks/useStore";
 import { Button } from "@/components/button";
 
 export default function Home() {
-  const [components, setComponents] = useStore('components');
+  const [components] = useStore('components');
 
   return (
     <div>
       <Head>
-        <title>Pay Portal | CHASER</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Pay Portal | UNIPaaS Platform</title>
       </Head>
 
       {components && <div>
@@ -27,8 +26,6 @@ export default function Home() {
           </div>
         </div>
       </div>}
-
-
     </div>
   )
 }

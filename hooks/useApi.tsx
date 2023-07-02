@@ -9,7 +9,13 @@ export const useApi = (baseURL: string, privateKey: string) => {
   const postAuthorize = async (payload: PostAuthorizePayload) => {
     const response = await axios.post<{accessToken: string}>(`${baseURL}/platform/authorize`, {
       ...payload,
-      "scopes": ['master'],
+      "scopes": [
+        'master', // todo specifiec scopes (pay portal and onboarding)
+
+        // invoice component
+        'invoice_read',
+        'invoice_write',
+      ],
 
     }, {
       headers: {"Authorization": `Bearer ${privateKey}`},
