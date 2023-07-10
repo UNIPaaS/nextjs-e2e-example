@@ -1,0 +1,22 @@
+{
+  "local": {
+    "scriptSrc": "http://localhost:3302/dist/embedded-ui.js",
+    "privateKey": "",
+    "baseURL": "http://localhost:3001"
+  },
+  "development": {
+    "scriptSrc": "https://cdn.unipaas.com/embedded-ui.dev.js",
+    "privateKey": "",
+    "baseURL": "https://dev.unipaas.com"
+  },
+  "sandbox": {
+    "scriptSrc": "https://cdn.unipaas.com/embedded-ui.js",
+    "privateKey": "",
+    "baseURL": "https://sandbox.unipaas.com"
+  },
+  "production": {
+    "scriptSrc": "https://cdn.unipaas.com/embedded-ui.js",
+    "privateKey": "",
+    "baseURL": "https://api.unipaas.com"
+  }
+}
