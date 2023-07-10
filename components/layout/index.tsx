@@ -17,7 +17,7 @@ export function Layout({ children }: { children: ReactNode }) {
   const [components, setComponents] = useStore('components');
 
   const environmentKeys = useEnvironment();
-  const {scriptSrc, baseURL} = environmentKeys;
+  const {scriptSrc, baseURL, environmentNames} = environmentKeys;
   const {postAuthorize} = useApi(baseURL);
 
   const authorizeAPI = async () => {
@@ -87,7 +87,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <div className="flex items-baseline space-x-2">
             {/* environment */}
             <SelectInput label="Environment" value={environment} setValue={setEnvironment}>
-              {environmentKeys.names.map((key: string, index: number) => (
+              {environmentNames.map((key: string, index: number) => (
                 <option key={`env-${key}-${index}`} value={key}>{key}</option>
               ))}
             </SelectInput>

@@ -23,7 +23,7 @@ export const useEnvironment = () => {
 
   return {
     ...environmentMap[environment] || {},
-    names: Object.keys(environmentMap),
+    environmentNames: Object.keys(environmentMap),
   };
 
 };
