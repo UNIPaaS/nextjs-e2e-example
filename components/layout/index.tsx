@@ -6,17 +6,17 @@ import { SelectInput } from "@/components/inputs/select";
 import { useApi } from "@/hooks/useApi";
 import { Button } from "@/components/button";
 import { TextInput } from "@/components/inputs/text";
-import { useEnvironment } from "@/hooks/useEnvironment";
+import { useEnvironmentKeys } from "@/hooks/useEnvironmentKeys";
 
 export function Layout({ children }: { children: ReactNode }) {
   const [selectedVendorId, setSelectedVendorId] = useStore('selectedVendorId');
-  const [vendors, setVendors] = useStore('vendors');
+  const [vendors] = useStore('vendors');
   const [privateKey, setPrivateKey] = useStore('privateKey');
   const [environment, setEnvironment] = useStore('environment');
   const [accessToken, setAccessToken] = useStore('accessToken');
   const [components, setComponents] = useStore('components');
 
-  const environmentKeys = useEnvironment();
+  const environmentKeys = useEnvironmentKeys();
   const {scriptSrc, baseURL, environmentNames} = environmentKeys;
   const {postAuthorize} = useApi(baseURL);
 

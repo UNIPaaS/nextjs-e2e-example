@@ -1,7 +1,7 @@
 import React from "react";
 import { useStore } from "@/hooks/useStore";
 
-export const useEnvironment = () => {
+export const useEnvironmentKeys = () => {
   const [environment, setEnvironment] = useStore('environment');
   const environmentMap: any = {
     "development": {

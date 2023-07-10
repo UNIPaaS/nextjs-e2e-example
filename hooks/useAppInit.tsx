@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useStore } from "@/hooks/useStore";
 import { useApi } from "@/hooks/useApi";
-import { useSdk } from "@/hooks/useSdk";
-import { useEnvironment } from "@/hooks/useEnvironment";
+import { mountScript, useSdk } from "@/hooks/useSdk";
+import { useEnvironmentKeys } from "@/hooks/useEnvironmentKeys";
 
 export const useAppInit = () => {
   const [selectedVendorId, setSelectedVendorId] = useStore('selectedVendorId');
@@ -11,22 +11,52 @@ export const useAppInit = () => {
   const [accessToken, setAccessToken] = useStore('accessToken');
   const [unipaasLoaded, setUnipaasLoaded] = useStore('unipaasLoaded');
   const [components, setComponents] = useStore('components');
-  const environmentKeys = useEnvironment();
+  const [environment, setEnvironment] = useStore('environment');
+  const environmentKeys = useEnvironmentKeys();
   const {scriptSrc, baseURL} = environmentKeys;
   const {postAuthorize, getVendors} = useApi(baseURL);
+  const [isFirstRender, setIsFirstRender] = React.useState(true);
 
-  const authorizeAPI = async () => {
-    const data = await postAuthorize({
-      ...(selectedVendorId && {vendorId: selectedVendorId}),
-    });
-    setAccessToken(data?.accessToken);
-  }
 
-  // on private key update get vendors
+
+  useEffect(() => {
+    if (isFirstRender) {
+      setIsFirstRender(false);
+      return;
+    }
+  }, [isFirstRender]);
+
+
+  // 1. on environment change: mount unipaas script
+  useEffect(() => {
+    console.log('environment changed to', environment);
+    setUnipaasLoaded(false);
+    mountScript("unipaas-script", scriptSrc, () => setUnipaasLoaded(true));
+
+
+
+    console.log('setting key', environmentKeys.privateKey, ' for env ', environment)
+    setPrivateKey(environmentKeys.privateKey); // set privateKey from env keys (if available)
+    // if (isFirstRender) {
+    //   return;
+    // }
+    //
+    // // todo reset all states that are being set below
+    // setVendors(null); // 2
+    // setPrivateKey(null); // 2
+    // setAccessToken(null); // 3
+    // setComponents(null); // 4
+  }, [environment]);
+
+
+  // 2. on private key change load vendors. sets vendors
   useEffect(() => {
     if (!privateKey) {
       return;
     }
+
+    console.log('private key changed: ', privateKey, 'loading vendors')
+
     getVendors().then((vendors) => {
       setVendors(vendors);
     }).catch((error) => {
@@ -34,23 +64,24 @@ export const useAppInit = () => {
     });
   }, [privateKey]);
 
-  // on environment change: update private key
+  // 3. on selected vendor id change: authorize via api. sets access token
   useEffect(() => {
-    // setAccessToken('');
-    // setPrivateKey('');
-    // setUnipaasLoaded(false);
-    // setPrivateKey(environmentKeys.privateKey);
-  }, [environmentKeys]);
+    if (!selectedVendorId) {
+      return;
+    }
+    // authorizeAPI();
 
-  // init unipaas sdk
-  useSdk("unipaas-script", scriptSrc, () => {
-    // setUnipaasLoaded(true)
-  });
+    const data = postAuthorize({
+      ...(selectedVendorId && {vendorId: selectedVendorId}),
+    }).then(res => {
+      setAccessToken(res?.accessToken);
+    })
+  }, [selectedVendorId]);
 
-  // on unipaas load and accessToken available: create unipaas components
+  // 4. on access token change: create components. sets components
   useEffect(() => {
     // make sure unipaas is loaded and we have an access token
-    if (!unipaasLoaded || !accessToken) {
+    if (!accessToken) {
       return;
     }
 
@@ -63,10 +94,12 @@ export const useAppInit = () => {
 
     // if components already exist: reset them
     if (components) {
+      console.log('resetting components');
       components.reset({accessToken});
       return;
     }
 
+    console.log('creating components');
     // otherwise create new components
     const unipaasComponents = unipaas.components(accessToken, {
       paymentsEnabled: true,
@@ -76,18 +109,8 @@ export const useAppInit = () => {
     });
 
     setComponents(unipaasComponents);
-  }, [accessToken, unipaasLoaded, components]);
+  }, [accessToken]);
 
-  // on selected vendor id change: authorize via api
-  useEffect(() => {
-    if (!selectedVendorId) {
-      return;
-    }
-    authorizeAPI();
-  }, [selectedVendorId]);
 
-  // return {postAuthorize, getVendors};
-
-  // return;
 };
 

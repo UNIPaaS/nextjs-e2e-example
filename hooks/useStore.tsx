@@ -1,4 +1,5 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface StoreState {
   organization: string;
@@ -38,24 +39,10 @@ export const useStore = (key: keyof StoreState) => {
   const value = data[key];
   const setValue = (value: any) => {
     setData({...data, [key]: value})
-    // save in localstorage
-    if (key === 'privateKey') {
-      localStorage.setItem('privateKey', value);
-    }
+
   };
 
   // // load from localstorage
-  useEffect(() => {
-    if (key !== 'privateKey') {
-      return;
-    }
-    const existingPrivateKey = localStorage.getItem('privateKey');
-    // console.log('existingPrivateKey 1', existingPrivateKey)
-    if (existingPrivateKey) {
-      setValue(existingPrivateKey);
-    }
-
-  }, [key]);
 
 
 
