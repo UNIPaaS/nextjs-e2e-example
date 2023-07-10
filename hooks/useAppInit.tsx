@@ -39,14 +39,16 @@ export const useAppInit = () => {
 
   // on environment change: update private key
   useEffect(() => {
-    setAccessToken('');
-    setPrivateKey('');
-    setUnipaasLoaded(false);
-    setPrivateKey(environmentKeys.privateKey);
+    // setAccessToken('');
+    // setPrivateKey('');
+    // setUnipaasLoaded(false);
+    // setPrivateKey(environmentKeys.privateKey);
   }, [environmentKeys]);
 
   // init unipaas sdk
-  useSdk("unipaas-script", scriptSrc, () => setUnipaasLoaded(true));
+  useSdk("unipaas-script", scriptSrc, () => {
+    // setUnipaasLoaded(true)
+  });
 
   // on unipaas load and accessToken available: create unipaas components
   useEffect(() => {
