@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useStore } from "@/hooks/useStore";
 import { SelectInput } from "@/components/inputs/select";
 import { useApi } from "@/hooks/useApi";
-import * as EnvironmentKeys from "@/environment-keys.json";
 import { Button } from "@/components/button";
 import { TextInput } from "@/components/inputs/text";
+import { useEnvironment } from "@/hooks/useEnvironment";
 
 export function Layout({ children }: { children: ReactNode }) {
   const [selectedVendorId, setSelectedVendorId] = useStore('selectedVendorId');
@@ -16,9 +16,8 @@ export function Layout({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useStore('accessToken');
   const [components, setComponents] = useStore('components');
 
-  // @ts-ignore
-  const environmentKeys = EnvironmentKeys[environment];
-  const {scriptSrc, baseURL} = environmentKeys || {};
+  const environmentKeys = useEnvironment();
+  const {scriptSrc, baseURL} = environmentKeys;
   const {postAuthorize} = useApi(baseURL);
 
   const authorizeAPI = async () => {
@@ -88,7 +87,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <div className="flex items-baseline space-x-2">
             {/* environment */}
             <SelectInput label="Environment" value={environment} setValue={setEnvironment}>
-              {Object.keys(EnvironmentKeys).map((key, index) => (
+              {environmentKeys.names.map((key: string, index: number) => (
                 <option key={`env-${key}-${index}`} value={key}>{key}</option>
               ))}
             </SelectInput>

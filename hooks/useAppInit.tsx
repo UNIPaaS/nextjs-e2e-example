@@ -1,21 +1,18 @@
 import React, { useEffect } from "react";
 import { useStore } from "@/hooks/useStore";
-import * as EnvironmentKeys from "@/environment-keys.json";
 import { useApi } from "@/hooks/useApi";
 import { useSdk } from "@/hooks/useSdk";
+import { useEnvironment } from "@/hooks/useEnvironment";
 
 export const useAppInit = () => {
   const [selectedVendorId, setSelectedVendorId] = useStore('selectedVendorId');
   const [vendors, setVendors] = useStore('vendors');
   const [privateKey, setPrivateKey] = useStore('privateKey');
-  const [environment, setEnvironment] = useStore('environment');
   const [accessToken, setAccessToken] = useStore('accessToken');
   const [unipaasLoaded, setUnipaasLoaded] = useStore('unipaasLoaded');
   const [components, setComponents] = useStore('components');
-
-  // @ts-ignore
-  const environmentKeys = EnvironmentKeys[environment];
-  const {scriptSrc, baseURL} = environmentKeys || {};
+  const environmentKeys = useEnvironment();
+  const {scriptSrc, baseURL} = environmentKeys;
   const {postAuthorize, getVendors} = useApi(baseURL);
 
   const authorizeAPI = async () => {
