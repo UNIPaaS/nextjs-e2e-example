@@ -20,10 +20,10 @@ The starter includes:
 
 ## 🚀 Getting started
 
-Before you get started, you will need ro rename `environment-keys.example.json` to `environment-keys.json` and populate it with your UNIPaaS private key.
 The quickest way to get started is to use the following steps:
 
 1. clone this repo
 2. cd into the directory
 3. `yarn install`
 4. `yarn dev`
+5. update `environment-keys.json` with your UNIPaaS private keys per each environment
