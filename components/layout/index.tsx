@@ -19,7 +19,7 @@ export function Layout({ children }: { children: ReactNode }) {
   // @ts-ignore
   const environmentKeys = EnvironmentKeys[environment];
   const {scriptSrc, baseURL} = environmentKeys || {};
-  const {postAuthorize} = useApi(baseURL, privateKey);
+  const {postAuthorize} = useApi(baseURL);
 
   const authorizeAPI = async () => {
     const data = await postAuthorize({

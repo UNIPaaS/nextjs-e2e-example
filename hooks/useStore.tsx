@@ -13,7 +13,7 @@ interface StoreState {
 }
 const storeInitialState: StoreState = {
   organization: "None",
-  environment: "local",
+  environment: "development",
   vendors: [],
   selectedVendorId: "",
   accessToken: "",

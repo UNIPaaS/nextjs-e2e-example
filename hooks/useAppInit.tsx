@@ -16,7 +16,7 @@ export const useAppInit = () => {
   // @ts-ignore
   const environmentKeys = EnvironmentKeys[environment];
   const {scriptSrc, baseURL} = environmentKeys || {};
-  const {postAuthorize, getVendors} = useApi(baseURL, privateKey);
+  const {postAuthorize, getVendors} = useApi(baseURL);
 
   const authorizeAPI = async () => {
     const data = await postAuthorize({
