@@ -7,7 +7,5 @@ interface AppInitProps {
 export function AppInit({ children }: AppInitProps) {
   useAppInit();
 
-  return <>
-    {children}
-  </>;
+  return children;
 }

@@ -10,7 +10,7 @@ export default function Home() {
 
   const [invoiceId, setInvoiceId] = useState('INV-122');
   const [customer, setCustomer] = useState({
-    reference: "CUSTOMER-343",
+    reference: "CUSTOMER-342",
     name: "evg customer",
     email: "evgeni.leonti+customer1@unipaas.com",
   });
@@ -55,9 +55,9 @@ export default function Home() {
             <Button onClick={() => {
               const payPortal = components.create("invoice", {
                 // todo double check the mandatory/conditional fields
-                mode: 'create', //mandatory: create, edit and view
-                invoiceId, //conditional - provide if invoice created (edit/view)
-                customer, //conditional - provide once customer is selected
+                mode: 'create', // mandatory: create, edit and view
+                reference: invoiceId, // conditional - provide if invoice created (edit/view)
+                customer, // conditional - provide once customer is selected
               });
               payPortal.mount("#invoice");
             }}>Create</Button>
