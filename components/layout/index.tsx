@@ -88,10 +88,9 @@ export function Layout({ children }: { children: ReactNode }) {
           <div className="flex items-baseline space-x-2">
             {/* environment */}
             <SelectInput label="Environment" value={environment} setValue={setEnvironment}>
-              <option value="local">local</option>
-              <option value="development">development</option>
-              <option value="sandbox">sandbox</option>
-              <option value="production">production</option>
+              {Object.keys(EnvironmentKeys).map((key, index) => (
+                <option key={`env-${key}-${index}`} value={key}>{key}</option>
+              ))}
             </SelectInput>
 
             {/* private key */}
