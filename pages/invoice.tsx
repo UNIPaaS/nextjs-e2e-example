@@ -26,26 +26,37 @@ export default function Home() {
       {components && <div>
         <h2 className="text-xl font-bold my-4">Invoice</h2>
 
-        {/* settings */}
+        {/* customer settings */}
         <div>
+          <h3 className="text-lg font-bold">Customer</h3>
           <div className="flex items-baseline space-x-2">
             {/* customer reference */}
-            <TextInput label="Customer Reference" value={customer.reference} setValue={(reference => setCustomer({
+            <TextInput label="Reference" value={customer.reference} setValue={(reference => setCustomer({
               ...customer,
               reference,
             }))} />
 
             {/* customer name */}
-            <TextInput label="Customer Name" value={customer.name} setValue={(name => setCustomer({
+            <TextInput label="Name" value={customer.name} setValue={(name => setCustomer({
               ...customer,
               name
             }))} />
 
             {/* customer email */}
-            <TextInput label="Customer Email" value={customer.email} setValue={(email => setCustomer({
+            <TextInput label="Email" value={customer.email} setValue={(email => setCustomer({
               ...customer,
               email
             }))} />
+          </div>
+        </div>
+
+        <br />
+        {/* invoice settings */}
+        <div>
+          <h3 className="text-lg font-bold">Invoice</h3>
+          <div className="flex items-baseline space-x-2">
+            {/* invoice reference */}
+            <TextInput label="Reference" value={invoiceId} setValue={(reference => setInvoiceId(reference))} />
           </div>
         </div>
 
