@@ -5,7 +5,7 @@ import { Button } from "@/components/button";
 import { TextInput } from "@/components/inputs/text";
 import { useState } from "react";
 
-const generateRandomNumber = (min: number = 100, max: number = 999) => Math.floor(Math.random() * (max - min + 1) + min);
+const generateRandomNumber = (min = 100, max = 999) => Math.floor(Math.random() * (max - min + 1) + min);
 
 export default function Home() {
   const [components] = useStore('components');
@@ -69,9 +69,9 @@ export default function Home() {
             <Button onClick={() => {
               const invoiceConfig = {
                 mode: "create",
-                customer, //conditional - provide once customer is selected
+                customer, // conditional - provide once customer is selected
                 invoice: {
-                  reference: invoiceId //conditional - provide if invoice created (edit/view)
+                  reference: invoiceId // conditional - provide if invoice created (edit/view)
                 }}
 
               console.log('calling components.create(invoice)', {invoiceConfig});
