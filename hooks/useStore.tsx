@@ -1,5 +1,4 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
-import { useRouter } from "next/router";
 import { DEFAULT_ENVIRONMENT } from "@/hooks/useEnvironmentKeys";
 
 interface StoreState {
@@ -37,14 +36,21 @@ export const useStore = (key: keyof StoreState) => {
   const context = useContext<any>(StateContext);
   const [data, setData] = context;
 
-  const value = data[key];
+  const isLocalStorageAvailable = typeof window !== "undefined" && typeof localStorage !== "undefined";
+  const isLocalStorageKey = key === 'environment' || key === 'privateKey';
+  const useLocalStorage = isLocalStorageAvailable && isLocalStorageKey;
+  const localStorageKey = `store-${key}`;
+  const localStorageValue = useLocalStorage ? localStorage.getItem(localStorageKey) : null;
+
+  const value = localStorageValue || data[key];
+
   const setValue = (value: any) => {
     setData({...data, [key]: value})
+    if (useLocalStorage) {
+      localStorage.setItem(localStorageKey, value);
+    }
 
   };
-
-  // // load from localstorage
-
 
 
   return [value, setValue];

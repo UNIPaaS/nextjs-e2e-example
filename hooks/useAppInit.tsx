@@ -41,8 +41,11 @@ export const useAppInit = () => {
     console.log('window.unipaas.apiBaseUrl 2', window?.unipaas?.apiBaseUrl)
 
 
-    console.log('setting key', environmentKeys.privateKey, ' for env ', environment)
-    setPrivateKey(environmentKeys.privateKey); // set privateKey from env keys (if available)
+    if (!privateKey) {
+      console.log('setting key', environmentKeys.privateKey, ' for env ', environment)
+      setPrivateKey(environmentKeys.privateKey); // set privateKey from env keys (if available)
+    }
+
     // if (isFirstRender) {
     //   return;
     // }
