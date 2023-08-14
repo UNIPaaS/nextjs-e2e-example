@@ -5,14 +5,17 @@ import { Button } from "@/components/button";
 import { TextInput } from "@/components/inputs/text";
 import { useState } from "react";
 
+const generateRandomNumber = (min: number = 100, max: number = 999) => Math.floor(Math.random() * (max - min + 1) + min);
+
 export default function Home() {
   const [components] = useStore('components');
-
-  const [invoiceId, setInvoiceId] = useState('INV-122');
+  const invoiceReference = "INV-" + generateRandomNumber();
+  const customerReference = "CUS-" + generateRandomNumber();
+  const [invoiceId, setInvoiceId] = useState(invoiceReference);
   const [customer, setCustomer] = useState({
-    reference: "CUSTOMER-342",
-    name: "evg customer",
-    email: "evgeni.leonti+customer1@unipaas.com",
+    name: "John Doe",
+    reference: customerReference,
+    email: `${customerReference.toLowerCase().replace('-', '')}@unipaas.com`
   });
 
 
@@ -64,12 +67,20 @@ export default function Home() {
         <div className="mt-4 flex items-baseline space-x-2">
           <div>
             <Button onClick={() => {
-              const payPortal = components.create("invoice", {
-                // todo double check the mandatory/conditional fields
-                mode: 'create', // mandatory: create, edit and view
-                reference: invoiceId, // conditional - provide if invoice created (edit/view)
-                customer, // conditional - provide once customer is selected
-              });
+              const invoiceConfig = {
+                mode: "create",
+                customer, //conditional - provide once customer is selected
+                invoice: {
+                  reference: invoiceId //conditional - provide if invoice created (edit/view)
+                }}
+
+              console.log('calling components.create(invoice)', {invoiceConfig});
+              // const invoiceConfig = {
+              //   mode: 'create', // mandatory: create, edit and view
+              //   reference: invoiceId, // conditional - provide if invoice created (edit/view)
+              //   customer, // conditional - provide once customer is selected
+              // };
+              const payPortal = components.create("invoice", invoiceConfig);
               payPortal.mount("#invoice");
             }}>Create</Button>
             <br />

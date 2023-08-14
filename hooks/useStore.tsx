@@ -1,5 +1,6 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
+import { DEFAULT_ENVIRONMENT } from "@/hooks/useEnvironmentKeys";
 
 interface StoreState {
   organization: string;
@@ -14,7 +15,7 @@ interface StoreState {
 }
 const storeInitialState: StoreState = {
   organization: "None",
-  environment: "development",
+  environment: DEFAULT_ENVIRONMENT,
   vendors: [],
   selectedVendorId: "",
   accessToken: "",

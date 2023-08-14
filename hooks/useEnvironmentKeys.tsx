@@ -1,6 +1,8 @@
 import React from "react";
 import { useStore } from "@/hooks/useStore";
 
+export const DEFAULT_ENVIRONMENT = "sandbox";
+
 export const useEnvironmentKeys = () => {
   const [environment, setEnvironment] = useStore('environment');
   const environmentMap: any = {

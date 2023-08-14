@@ -29,10 +29,16 @@ export const useAppInit = () => {
 
   // 1. on environment change: mount unipaas script
   useEffect(() => {
-    console.log('environment changed to', environment);
+    console.log('environment changed to', environment, ' baseURL ', baseURL);
     setUnipaasLoaded(false);
+
+    // @ts-ignore
+    console.log('window.unipaas.apiBaseUrl 1', window?.unipaas?.apiBaseUrl)
+
     mountScript("unipaas-script", scriptSrc, () => setUnipaasLoaded(true));
 
+    // @ts-ignore
+    console.log('window.unipaas.apiBaseUrl 2', window?.unipaas?.apiBaseUrl)
 
 
     console.log('setting key', environmentKeys.privateKey, ' for env ', environment)
