@@ -77,6 +77,11 @@ export function Layout({ children }: { children: ReactNode }) {
               Payments
             </Link>
           </li>
+          <li>
+            <Link href="/balance" className="block my-2 py-2 px-4 rounded hover:bg-blue-500 hover:text-white transition-colors duration-200">
+              Balance
+            </Link>
+          </li>
         </ul>
       </aside>
 
