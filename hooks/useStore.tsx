@@ -1,5 +1,6 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { DEFAULT_ENVIRONMENT } from "@/hooks/useEnvironmentKeys";
+import { useRouter } from "next/router";
 
 interface StoreState {
   organization: string;
@@ -33,6 +34,8 @@ export const StoreProvider = (props: StoreProviderProps) => {
   return <StateContext.Provider value={[data, setData]} {...props} />;
 };
 export const useStore = (key: keyof StoreState) => {
+  const router = useRouter();
+  const { query } = router;
   const context = useContext<any>(StateContext);
   const [data, setData] = context;
 
@@ -42,7 +45,7 @@ export const useStore = (key: keyof StoreState) => {
   const localStorageKey = `store-${key}`;
   const localStorageValue = useLocalStorage ? localStorage.getItem(localStorageKey) : null;
 
-  const value = localStorageValue || data[key];
+  const value = query[key] || localStorageValue || data[key];
 
   const setValue = (value: any) => {
     setData({...data, [key]: value})
