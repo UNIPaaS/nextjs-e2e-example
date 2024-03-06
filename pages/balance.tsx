@@ -18,14 +18,24 @@ export default function PaymentsPage() {
 
         <div className="mt-4 flex items-baseline space-x-2">
           <div>
-            <Button onClick={() => {
-              const payments = components.create("balance", {
-                vendor: {
-                  name: "Vendor Name",
-                }
-              });
-              payments.mount("#balance");
-            }}>Create</Button>
+            <div className="flex items-center space-x-2">
+              <Button onClick={() => {
+                const payments = components.create("balance", {
+                  vendor: {
+                    name: "Vendor Name",
+                  }
+                });
+                payments.mount("#balance");
+              }}>Create</Button>
+              <Button onClick={() => {
+                const payments = components.create("balance", {
+                  vendor: {
+                    name: "Vendor Name 2",
+                  }
+                });
+                payments.mount("#balance");
+              }}>Update</Button>
+            </div>
             <br />
             <br />
             <div id="balance" className="w-full"/>
