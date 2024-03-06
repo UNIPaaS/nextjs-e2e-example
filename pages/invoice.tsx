@@ -72,7 +72,11 @@ export default function Home() {
                 customer, // conditional - provide once customer is selected
                 invoice: {
                   reference: invoiceId // conditional - provide if invoice created (edit/view)
-                }}
+                },
+                vendor: {
+                  name: "Vendor Name",
+                }
+              };
 
               console.log('calling components.create(invoice)', {invoiceConfig});
               // const invoiceConfig = {

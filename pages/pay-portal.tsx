@@ -17,7 +17,11 @@ export default function Home() {
         <div className="mt-4 flex items-baseline space-x-2">
           <div>
             <Button onClick={() => {
-              const payPortal = components.create("payPortal", {});
+              const payPortal = components.create("payPortal", {
+                vendor: {
+                  name: "Vendor Name",
+                }
+              });
               payPortal.mount("#payPortal");
             }}>Create</Button>
             <br />
